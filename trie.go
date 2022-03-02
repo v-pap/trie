@@ -16,6 +16,8 @@ type Trie interface {
 	StartsWith(prefix string) bool
 	// Size returns the number of keys in the tree.
 	Size() int
+	// Finds the longest unique suffix of a given word if it exists in the Trie.
+	FindLongestUniqueSuffix(word string) (string, bool)
 }
 
 // New creates a new trie, by default rune-wise.

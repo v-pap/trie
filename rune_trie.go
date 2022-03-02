@@ -84,6 +84,44 @@ func (t *runeTrie) nodeByPrefix(prefix string) (*runeNode, rune) {
 	return current, r
 }
 
+// Finds the longest unique suffix of a given word.
+// It iterates each character of the word and tries to find
+// if a character is shared with other words. The suffix
+// of the given word that is not shared with other words is returned.
+func (t *runeTrie) FindLongestUniqueSuffix(word string) (string, bool) {
+	currentSuffix := ""
+	current := t.root
+
+	for i := 0; i < len(word)-1; i++ {
+		letter := rune(word[i])
+		n, ok := current.children[letter]
+		if !ok {
+			return "", false
+		}
+
+		if len(n.children) > 1 || n.last {
+			currentSuffix = ""
+		} else {
+			currentSuffix += string(letter)
+		}
+		current = n
+	}
+
+	lastLetter := rune(word[len(word)-1])
+	current, ok := current.children[lastLetter]
+	if !ok {
+		return "", false
+	}
+	if !current.last {
+		return "", false
+	}
+	if len(current.children) > 0 {
+		return "", true
+	}
+
+	return currentSuffix + string(lastLetter), true
+}
+
 func search(currentNode *runeNode, currentRune rune, prefix []rune) []string {
 	words := []string{}
 	if currentNode == nil {

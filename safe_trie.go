@@ -44,7 +44,6 @@ func (st *safeTrie) StartsWith(prefix string) bool {
 	return st.t.StartsWith(prefix)
 }
 
-
 // Finds and returns words by prefix.
 func (st *safeTrie) SearchByPrefix(prefix string) []string {
 	st.mu.RLock()
@@ -59,4 +58,12 @@ func (st *safeTrie) Size() int {
 	defer st.mu.RUnlock()
 
 	return st.t.Size()
+}
+
+// Finds the longest unique suffix of a given word if it exists in the Trie.
+func (st *safeTrie) FindLongestUniqueSuffix(word string) (string, bool) {
+	st.mu.RLock()
+	defer st.mu.RUnlock()
+
+	return st.t.FindLongestUniqueSuffix(word)
 }
